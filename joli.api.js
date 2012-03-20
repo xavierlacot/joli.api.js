@@ -228,6 +228,13 @@ function joliApi(joli) {
                 record._metadata.remote = remote;
             }
 
+            // add object methods
+            if (this.options.objectMethods) {
+                joli.each(this.options.objectMethods, function(method, name) {
+                    record[name] = method;
+                });
+            }
+
             return record;
         },
         save: function(data) {
@@ -276,7 +283,7 @@ function joliApi(joli) {
                 Ti.API.log('info', method + ' request to url ' + url);
 
                 this.xhr.onload = function() {
-                    //        Titanium.API.log('info', this.responseText);
+                    // Titanium.API.log('info', this.responseText);
 
                     if('GET' == this.httpmethod) {
                         joli.saveRecord(this.apimodel, this.responseText);
