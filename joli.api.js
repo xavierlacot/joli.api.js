@@ -1,5 +1,9 @@
 function joliApi(joli) {
     joli.saveRecord = function(table, items) {
+        if (items.responseText) {
+            items = items.responseText;
+        }
+        
         var i = 0;
         var new_count = 0;
         var updated_count = 0;
@@ -34,6 +38,7 @@ function joliApi(joli) {
 
     joli.apimodel = function(options) {
         var defaults = {
+            saveRecords: null,
             updateTime: 86400, // 1 day
             url: null
         };
@@ -283,10 +288,15 @@ function joliApi(joli) {
                 Ti.API.log('info', method + ' request to url ' + url);
 
                 this.xhr.onload = function() {
-                    // Titanium.API.log('info', this.responseText);
+                    //Titanium.API.log('info', this.responseText);
 
                     if('GET' == this.httpmethod) {
-                        joli.saveRecord(this.apimodel, this.responseText);
+                        var model = joli.models.get(this.apimodel);
+                        if(model.options.saveRecords !== null) {
+                            model.options.saveRecords(this);
+                        } else {
+                            joli.saveRecord(this.apimodel, this.responseText);
+                        }
                     } else if('POST' == this.httpmethod) {
                         joli.saveRecord(this.apimodel, '[' + this.responseText + ']');
                     }
