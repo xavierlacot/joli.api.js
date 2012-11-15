@@ -3,7 +3,7 @@ function joliApi(joli) {
         if (items.responseText) {
             items = items.responseText;
         }
-        
+
         var i = 0;
         var new_count = 0;
         var updated_count = 0;
@@ -247,7 +247,7 @@ function joliApi(joli) {
                 return;
             }
 
-            if(data.metadata.remote) {
+            if(data.metadata && data.metadata.remote) {
                 // push the data remotely, it will be saved locally when the service
                 // aknowlodges the write
                 if(data.originalData) {
